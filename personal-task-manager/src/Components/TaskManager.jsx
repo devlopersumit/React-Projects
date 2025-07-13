@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function TaskManager() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [filter, setFilter] = useState("all");
+
+
+  useEffect(() => {
+    console.log("Saving to localStorage:", tasks);
+    
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  },[tasks]);
+  
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if(savedTasks) {
+        setTasks(JSON.parse(savedTasks));
+    }
+  },[]);
+
 
   //Add Task
   const handleAddTask = (e) => {
@@ -45,18 +60,18 @@ function TaskManager() {
 
   return (
     <>
-      <div className="w-full h-screen bg-slate-800 flex justify-center items-center flex-col">
+      <div className="w-full h-screen bg-slate-800 flex justify-center items-center flex-col flex-wrap">
         <h1 className="text-white text-3xl font-bold mb-6">
           Personal Task Manager
         </h1>
         <div className="w-auto h-auto bg-white border-none rounded-xl px-6 py-4 flex flex-col gap-3">
-          <form onSubmit={handleAddTask} className="mb-4">
+          <form onSubmit={handleAddTask} className="mb-4 mt-5">
             <input
               type="text"
               placeholder="Enter the task..."
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
-              className="basis-1 h-auto p-1 rounded-xl outline-none border-solid border-[1px] border-gray-900 pl-4 text-xl"
+              className="basis-1 h-auto p-1 rounded-[10px] outline-none border-solid border-[0.5px] border-gray-500 pl-4 text-xl"
             />
 
             <button
@@ -69,7 +84,7 @@ function TaskManager() {
 
           <ul className="flex flex-col gap-3">
             {filteredTasks.map((task) => (
-              <li className="text-xl font-serif flex items-center justify-between bg-white shadow-sm  rounded-xl" 
+              <li className="text-xl font-serif flex items-center justify-between bg-transparent shadow-sm  rounded-xl" 
               key={task.id}>
 
                 <div className="flex items-center gap-2">
@@ -97,7 +112,7 @@ function TaskManager() {
             ))}
           </ul>
 
-          <div className="mt-14 flex justify-between">
+          <div className="mt-14 flex justify-between mb-3">
             <button className="w-auto h-auto py-2 px-5 ml-2 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 duration-75 active:bg-green-900"
              onClick={() => setFilter("all")}>All</button>
             <button className="w-auto h-auto py-2 px-5 ml-2 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 duration-75 active:bg-orange-900"
