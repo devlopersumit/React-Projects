@@ -29,6 +29,11 @@ const handleAddTask = (e)=> {
     setTasks(updatedTask);
  };
 
+ const deleteTask = (id)=> {
+    const filteredTask = tasks.filter(task => task.id !== id);
+    setTasks(filteredTask); 
+ };
+
 
     return (
         <>
@@ -55,6 +60,9 @@ const handleAddTask = (e)=> {
                             checked = {task.completed}
                             onChange={()=> toggleComplete(task.id)} />
                             <span style={{textDecoration: task.completed ? "line-through" : "none"}}>{task.title}</span>
+
+                            <button className="text-red-500"
+                            onClick={()=> deleteTask(task.id)}>Delete</button>
                         </li>
                     ))
                 }
